@@ -1,5 +1,26 @@
+// nat_instance role
+resource "aws_iam_role" "nat_instance" {
+  name = "nat_instance"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+// nat_instance needs to see autotscaling groups and handle enis
 data "aws_iam_policy_document" "document" {
-  // autoscaling
   statement {
     actions = [
       "autoscaling:DescribeAutoScalingGroups",
@@ -16,7 +37,6 @@ data "aws_iam_policy_document" "document" {
     resources = ["*"]
   }
 
-  // eni
   statement {
     actions = [
       "ec2:DescribeNetworkInterfaces",
@@ -35,20 +55,20 @@ data "aws_iam_policy_document" "document" {
   }
 }
 
-module "nat_policy" {
-  name   = "${var.name}"
+// create our nat_instance iam_policy
+resource "aws_iam_policy" "nat_instance" {
+  name   = "nat_instance"
   policy = "${data.aws_iam_policy_document.document.json}"
-  source = "../../modules/iam/policy"
 }
 
-module "nat_role" {
-  policy_arn = ["${module.nat_policy.arn}"]
-  name       = "${var.name}"
-  source     = "../../modules/iam/role"
+// attach iam_policy to nat_instance role
+resource "aws_iam_role_policy_attachment" "attachment" {
+  role       = "nat_instance"
+  policy_arn = "${aws_iam_policy.nat_instance.arn}"
 }
 
-module "nat_profile" {
-  source = "../../modules/iam/profile"
-  role   = "${module.nat_role.name}"
-  name   = "${var.name}"
+// create profile from role
+resource "aws_iam_instance_profile" "profile" {
+  name = "nat_instance"
+  role = "nat_instance"
 }
