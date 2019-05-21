@@ -12,7 +12,6 @@ iface eth0 inet6 manual
   down /usr/local/sbin/inet6-ifup-helper
 iface eth1 inet dhcp
   up /usr/local/sbin/add_routes.sh -d eth1 || true
-  up /usr/local/sbin/masquerade.sh -d eth1 || true
 allow-hotplug eth1
 iface eth1 inet6 manual
   up /usr/local/sbin/inet6-ifup-helper
