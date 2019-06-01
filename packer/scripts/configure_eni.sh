@@ -16,23 +16,26 @@ function cleanup {
 }
 
 function copy_files {
-  for file in dhclient.conf interfaces eni.service; do
-    [[ -e /tmp/eni_ctl/files/${file} ]] &&
-      sudo cp /tmp/eni_ctl/files/${file} /tmp
+  for file in /lib/systemd/system/eni.service /etc/network/interfaces /etc/dhcp/dhclient.conf; do
+  [[ -e /tmp/eni_ctl/files/$(basename $file) ]] &&
+    ( sudo cp /tmp/eni_ctl/files/$(basename $file) $file
+      sudo chown root:root $file
+      sudo chmod 0644 $file )
+    [[ $(basename $file) == 'eni.service' ]] &&
+      ( sudo systemctl daemon-reload && sudo systemctl eni.service enable )
   done
+
   for script in eni_ctl.sh add_routes.sh configure_eni.sh configure_interfaces.sh; do 
     [[ -e /tmp/eni_ctl/scripts/${script} ]] && 
-      sudo cp /tmp/eni_ctl/scripts/${script} /tmp
+      sudo cp /tmp/eni_ctl/scripts/${script} /usr/local/sbin/${script}
+      sudo chown root:root /usr/local/sbin/${script}
+      sudo chmod 755 /usr/local/sbin/${script}
   done
 }
 
 function configure_eni {
-  fetch_eni_ctl && copy_files
-  for script in configure_eni.sh configure_interfaces.sh; do
-    [[ -e /tmp/${script} ]] && 
-      ( sudo chmod +x /tmp/${script}
-        echo "sudo /tmp/${script}" )
-  done
+  fetch_eni_ctl
+  copy_files
   cleanup
 }
 

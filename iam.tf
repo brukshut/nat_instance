@@ -1,6 +1,6 @@
 // nat_instance role
 resource "aws_iam_role" "nat_instance" {
-  name = "nat_instance"
+  name = "${var.name}"
 
   assume_role_policy = <<EOF
 {
@@ -57,18 +57,18 @@ data "aws_iam_policy_document" "document" {
 
 // create our nat_instance iam_policy
 resource "aws_iam_policy" "nat_instance" {
-  name   = "nat_instance"
+  name   = "${var.name}"
   policy = "${data.aws_iam_policy_document.document.json}"
 }
 
 // attach iam_policy to nat_instance role
 resource "aws_iam_role_policy_attachment" "attachment" {
-  role       = "nat_instance"
+  role       = "${var.name}"
   policy_arn = "${aws_iam_policy.nat_instance.arn}"
 }
 
 // create profile from role
 resource "aws_iam_instance_profile" "profile" {
-  name = "nat_instance"
-  role = "nat_instance"
+  name = "${var.name}_profile"
+  role = "${var.name}"
 }
