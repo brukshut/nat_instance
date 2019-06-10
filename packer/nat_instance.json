@@ -26,6 +26,8 @@
       "ssh_username": "admin",
       "ami_name": "gturn-nat-{{timestamp}}",
       "encrypt_boot": true,
+      "force_delete_snapshot": true,
+      "force_deregister": true,
       "ami_block_device_mappings": [{
         "device_name": "xvda",
         "volume_size": 12,
@@ -49,6 +51,11 @@
       "type": "file",
       "source": "files/masquerade.sh",
       "destination": "/tmp/masquerade.sh"
+    },
+    {
+      "type": "file",
+      "source": "files/interfaces",
+      "destination": "/tmp/interfaces"
     },
     {
       "type": "file",

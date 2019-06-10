@@ -3,7 +3,7 @@ resource "aws_launch_configuration" "nat_instance" {
   image_id             = "${var.ami_id}"
   instance_type        = "${var.instance_type}"
   key_name             = "${var.key_name}"
-  iam_instance_profile = "${var.name}_profile"
+  iam_instance_profile = "${aws_iam_instance_profile.profile.name}"
   security_groups      = ["${aws_security_group.nat_instance.id}"]
   user_data_base64     = "${base64encode(data.template_file.user_data.rendered)}"
 

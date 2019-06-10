@@ -69,6 +69,6 @@ resource "aws_iam_role_policy_attachment" "attachment" {
 
 // create profile from role
 resource "aws_iam_instance_profile" "profile" {
-  name = "${var.name}_profile"
-  role = "${var.name}"
+  role = "${aws_iam_role.nat_instance.name}"
+  name = "${var.name}"
 }
