@@ -1,4 +1,4 @@
-resource "aws_security_group" "nat_instance" {
+resource "aws_security_group" "group" {
   name        = "${var.name}"
   vpc_id      = "${var.vpc_id}"
   description = "${var.name}"
