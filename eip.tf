@@ -10,7 +10,7 @@ resource "aws_eip" "eip" {
 resource "aws_network_interface" "interface" {
   subnet_id         = "${var.eni_subnet_id}"
   private_ips       = ["${var.private_ip}"]
-  security_groups   = ["${aws_security_group.nat_instance.id}"]
+  security_groups   = ["${aws_security_group.group.id}"]
   source_dest_check = false
 
   tags {
@@ -20,7 +20,7 @@ resource "aws_network_interface" "interface" {
 }
 
 resource "aws_eip_association" "association" {
-  network_interface_id = "${aws_network_interface.nat_instance.id}"
-  allocation_id        = "${aws_eip.nat_instance.id}"
+  network_interface_id = "${aws_network_interface.interface.id}"
+  allocation_id        = "${aws_eip.eip.id}"
   private_ip_address   = "${var.private_ip}"
 }

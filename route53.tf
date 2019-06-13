@@ -3,7 +3,7 @@ resource "aws_route53_record" "public" {
   name    = "${var.public_fqdn}"
   type    = "A"
   ttl     = "300"
-  records = ["${aws_eip.nat_instance.public_ip}"]
+  records = ["${aws_eip.eip.public_ip}"]
 }
 
 resource "aws_route53_record" "private" {

@@ -3,7 +3,7 @@ output "access_list" {
 }
 
 output "public_ip" {
-  value = "${aws_eip.nat_instance.public_ip}"
+  value = "${aws_eip.eip.public_ip}"
 }
 
 output "ami_id" {
@@ -11,11 +11,11 @@ output "ami_id" {
 }
 
 output "eni" {
-  value = "${aws_network_interface.nat_instance.id}"
+  value = "${aws_network_interface.interface.id}"
 }
 
 output "eip" {
-  value = "${aws_eip.nat_instance.id}"
+  value = "${aws_eip.eip.id}"
 }
 
 output "public_fqdn" {

@@ -57,13 +57,13 @@ data "aws_iam_policy_document" "document" {
 
 // create our nat_instance iam_policy
 resource "aws_iam_policy" "policy" {
-  name = "${var.name}"
+  name   = "${var.name}"
   policy = "${data.aws_iam_policy_document.document.json}"
 }
 
 // attach iam_policy to nat_instance role
 resource "aws_iam_role_policy_attachment" "attachment" {
-  role = "${var.name}"
+  role       = "${var.name}"
   policy_arn = "${aws_iam_policy.policy.arn}"
 }
 

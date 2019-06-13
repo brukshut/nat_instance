@@ -4,7 +4,7 @@ resource "aws_launch_configuration" "configuration" {
   instance_type        = "${var.instance_type}"
   key_name             = "${var.key_name}"
   iam_instance_profile = "${aws_iam_instance_profile.profile.name}"
-  security_groups      = ["${aws_security_group.nat_instance.id}"]
+  security_groups      = ["${aws_security_group.group.id}"]
   user_data_base64     = "${base64encode(data.template_file.user_data.rendered)}"
 
   lifecycle {
@@ -14,7 +14,7 @@ resource "aws_launch_configuration" "configuration" {
 
 resource "aws_autoscaling_group" "group" {
   name                      = "${var.name}"
-  launch_configuration      = "${aws_launch_configuration.nat_instance.id}"
+  launch_configuration      = "${aws_launch_configuration.configuration.id}"
   min_size                  = 1
   max_size                  = 1
   health_check_grace_period = 5
