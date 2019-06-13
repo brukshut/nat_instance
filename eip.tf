@@ -1,4 +1,4 @@
-resource "aws_eip" "nat_instance" {
+resource "aws_eip" "eip" {
   vpc                       = true
   associate_with_private_ip = "${var.private_ip}"
 
@@ -7,7 +7,7 @@ resource "aws_eip" "nat_instance" {
   }
 }
 
-resource "aws_network_interface" "nat_instance" {
+resource "aws_network_interface" "interface" {
   subnet_id         = "${var.eni_subnet_id}"
   private_ips       = ["${var.private_ip}"]
   security_groups   = ["${aws_security_group.nat_instance.id}"]
@@ -19,7 +19,7 @@ resource "aws_network_interface" "nat_instance" {
   }
 }
 
-resource "aws_eip_association" "eip_assoc" {
+resource "aws_eip_association" "association" {
   network_interface_id = "${aws_network_interface.nat_instance.id}"
   allocation_id        = "${aws_eip.nat_instance.id}"
   private_ip_address   = "${var.private_ip}"

@@ -1,4 +1,4 @@
-resource "aws_launch_configuration" "nat_instance" {
+resource "aws_launch_configuration" "configuration" {
   name_prefix          = "${var.name}"
   image_id             = "${var.ami_id}"
   instance_type        = "${var.instance_type}"
@@ -12,7 +12,7 @@ resource "aws_launch_configuration" "nat_instance" {
   }
 }
 
-resource "aws_autoscaling_group" "nat_instance" {
+resource "aws_autoscaling_group" "group" {
   name                      = "${var.name}"
   launch_configuration      = "${aws_launch_configuration.nat_instance.id}"
   min_size                  = 1
