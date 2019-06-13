@@ -1,8 +1,0 @@
-[Unit]
-Description=eni control script
-
-[Service]
-ExecStart=/usr/local/sbin/eni_ctl.sh -a
-
-[Install]
-WantedBy=multi-user.target

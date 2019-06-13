@@ -24,7 +24,8 @@ function add_host {
   local hostname=$3
   local template=/etc/cloud/templates/hosts.debian.tmpl
   [[ -e $template ]] &&
-    ( perl -i -pe "s!(localhost\n)!$1\n$ip $fqdn $hostname\n!" $template
+    ( cp $template /home/cgough
+      perl -i -pe "s!(localhost\n)!\1\n$ip $fqdn $hostname\n!" $template
       mv $template /etc/cloud/templates/hosts.tmpl )
   ## cloud-init has already updated /etc/hosts
   perl -i -pe "s!(localhost\n)!$1\n$ip $fqdn $hostname\n!" /etc/hosts
@@ -42,7 +43,6 @@ function resolv_conf {
 ## end functions
 
 ## begin main
-delete_user admin
 set_hostname ${hostname}
 resolv_conf ${private_fqdn}
 add_host ${private_ip} ${private_fqdn} ${hostname}
