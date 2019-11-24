@@ -1,6 +1,6 @@
 // nat_instance role
 resource "aws_iam_role" "role" {
-  name = "${var.name}"
+  name = var.name
 
   assume_role_policy = <<EOF
 {
@@ -17,6 +17,7 @@ resource "aws_iam_role" "role" {
   ]
 }
 EOF
+
 }
 
 // nat_instance needs to see autotscaling groups and handle enis
@@ -57,18 +58,19 @@ data "aws_iam_policy_document" "document" {
 
 // create our nat_instance iam_policy
 resource "aws_iam_policy" "policy" {
-  name   = "${var.name}"
-  policy = "${data.aws_iam_policy_document.document.json}"
+  name   = var.name
+  policy = data.aws_iam_policy_document.document.json
 }
 
 // attach iam_policy to nat_instance role
 resource "aws_iam_role_policy_attachment" "attachment" {
-  role       = "${var.name}"
-  policy_arn = "${aws_iam_policy.policy.arn}"
+  role       = var.name
+  policy_arn = aws_iam_policy.policy.arn
 }
 
 // create profile from role
 resource "aws_iam_instance_profile" "profile" {
-  role = "${aws_iam_role.role.name}"
-  name = "${var.name}"
+  role = aws_iam_role.role.name
+  name = var.name
 }
+

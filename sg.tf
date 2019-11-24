@@ -1,10 +1,10 @@
 resource "aws_security_group" "group" {
-  name        = "${var.name}"
-  vpc_id      = "${var.vpc_id}"
-  description = "${var.name}"
+  name        = var.name
+  vpc_id      = var.vpc_id
+  description = var.name
 
-  tags {
-    Name = "${var.name}"
+  tags = {
+    Name = var.name
   }
 
   lifecycle {
@@ -14,14 +14,14 @@ resource "aws_security_group" "group" {
   ingress {
     from_port   = 0
     to_port     = 0
-    cidr_blocks = ["${var.vpc_cidr}"]
+    cidr_blocks = [var.vpc_cidr]
     protocol    = -1
   }
 
   ingress {
     from_port   = 22
     to_port     = 22
-    cidr_blocks = ["${var.access_list}"]
+    cidr_blocks = var.access_list
     protocol    = "tcp"
   }
 
@@ -32,3 +32,4 @@ resource "aws_security_group" "group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
